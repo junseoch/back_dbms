@@ -1,0 +1,138 @@
+/*
+   요구사항
+   음료수 판매 업체입니다. 음료수마다 당첨번호가 있습니다. 
+   음료수의 당첨번호는 1개이고 당첨자의 정보를 알아야 상품을 배송할 수 있습니다.
+   당첨 번호마다 당첨 상품이 있고, 당첨 상품이 배송 중인지 배송 완료인지 구분해야 합니다.
+*/ 
+
+
+-- 1대다 부터 설계
+
+-- 상품에서 당첨을 분리
+-- 당첨은 (당첨됨, 안됨)으로 나뉨
+
+-- 사용자 1
+-- 음료수 1
+-- 주문 - FK 사용자, FK 음료수
+-- 상품 1
+-- 운 FK - 음료수
+-- 상품 1
+-- 추첨 : 운 FK, 상품FK
+-- 배송 : FK 상품, FK 사용자
+
+-- 1부터 설계
+
+
+-- 사용자 1
+CREATE SEQUENCE SEQ_USER;
+CREATE TABLE TBL_USER(
+   ID NUMBER CONSTRAINT PK_USER PRIMARY KEY,
+   USER_NAME VARCHAR2(255) NOT NULL,
+   USER_ADDRESS VARCHAR2(255) NOT NULL,
+   USER_PHONE VARCHAR(255) NOT NULL
+);
+
+-- 음료수 1
+CREATE SEQUENCE SEQ_SOFT_DRINK;
+CREATE TABLE TBL_SOFT_DRINK(
+   ID NUMBER CONSTRAINT PK_SOFT_DRINK PRIMARY KEY,
+   SOFT_DRINK_NAME VARCHAR2(255) NOT NULL UNIQUE,
+   SOFT_DRINK_PRICE NUMBER DEFAULT 0,
+   SOFT_DRINK_STOCK NUMBER DEFAULT 999,
+   SOFT_DRINK_MAKE_DATE TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 상품 1
+CREATE SEQUENCE SEQ_PRODUCT;
+CREATE TABLE TBL_PRODUCT(
+   ID NUMBER CONSTRAINT PK_PRODUCT PRIMARY KEY,
+   PRODUCT_NAME VARCHAR(255) NOT NULL UNIQUE,
+   PRODUCT_STOCK NUMBER DEFAULT 999
+);
+
+-- 주문 - FK사용자, FK음료수
+CREATE SEQUENCE SEQ_ORDER;
+CREATE TABLE TBL_ORDER(
+   ORDER_DATE TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+   USER_ID NUMBER,
+   SOFT_DRINK_ID NUMBER,
+   CONSTRAINT FK_ORDER_USER FOREIGN KEY(USER_ID)
+   REFERENCES TBL_USER(ID),
+   CONSTRAINT FK_ORDER_SOFT_DRINK FOREIGN KEY(SOFT_DRINK_ID)
+   REFERENCES TBL_SOFT_DRINK(ID)
+);
+
+-- 운 FK - 음료수
+CREATE SEQUENCE SEQ_LOTTERY;
+CREATE TABLE TBL_LOTTERY(
+   ID NUMBER CONSTRAINT PK_LOTTERY PRIMARY KEY,
+   SOFT_DRINK_ID NUMBER,
+   CONSTRAINT FK_LOTTERY_SOFT_DRINK FOREIGN KEY(SOFT_DRINK_ID)
+   REFERENCES TBL_SOFT_DRINK(ID)
+);
+
+-- 추첨 FK운, FK상품
+CREATE SEQUENCE SEQ_CIRULATION;
+CREATE TABLE TBL_CIRULATION(
+   ID NUMBER CONSTRAINT PK_CIRULATION PRIMARY KEY,
+   LOTTERY_ID NUMBER,
+   PRODUCT_ID NUMBER,
+   CONSTRAINT FK_CIRULATION_LOTTERY FOREIGN KEY(LOTTERY_ID)
+   REFERENCES TBL_LOTTERY(ID),
+   CONSTRAINT FK_CIRULATION_PRODUCT FOREIGN KEY(PRODUCT_ID)
+   REFERENCES TBL_PRODUCT(ID)
+);
+
+-- 배송 FK상품, FK사용자
+CREATE SEQUENCE SEQ_DELIVERY;
+CREATE TABLE TBL_DELIVERY(
+   ID NUMBER CONSTRAINT PK_DELIVERY PRIMARY KEY,
+   PRODUCT_ID NUMBER,
+   USER_ID NUMBER,
+   CONSTRAINT FK_DELIVERY_PRODUCT FOREIGN KEY(PRODUCT_ID)
+   REFERENCES TBL_PRODUCT(ID),
+   CONSTRAINT FK_DELIVERY_USER FOREIGN KEY(USER_ID)
+   REFERENCES TBL_USER(ID)
+);
+
+
+-- 거래  기업, 사용자
+-- 결제  카드
+-- 사용자는 카드를 등록함
+
+-- 사용자 :  카드 ->  1 : N
+-- 중간 테이블 필요  
+
+
+/*
+요구사항
+   이커머스 창업 준비중입니다. 
+   기업과 사용자 간 거래를 위해 기업의 정보와 사용자 정보가 필요합니다.
+   기업의 정보는 기업 이름, 주소, 대표번호가 있고
+   사용자 정보는 이름, 주소, 전화번호가 있습니다. 
+   결제 시 사용자 정보와 기업의 정보, 결제한 카드의 정보 모두 필요하며,
+   상품의 정보도 필요합니다. 상품의 정보는 이름, 가격, 재고입니다.
+   사용자는 등록한 카드의 정보를 저장할 수 있으며, 
+   카드의 정보는 카드번호, 카드사, 회원 정보가 필요합니다.
+*/
+
+-- 결제할 때 주문정보만 있으면 다른 정보를 다 알 수 있음
+-- 결제 : 회원, 기업, 카드, 상품
+
+-- 카드 : 회원, 기업
+-- 결제 : 카드 FK, 상품 FK
+
+-- 기업 1
+-- 사용자 1
+-- 거래 N
+
+-- 결제 FK사용자 FK기업 FK카드 FK상품
+-- 상품 1
+
+-- 하나의 회원이 여러개의 카드 등록 가능
+
+-- 사용자 1
+-- 카드 1
+-- 등록
+
+
