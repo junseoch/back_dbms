@@ -114,6 +114,9 @@ SELECT * FROM TBL_POST;
 -- 회사와 광고 테이블을 만들어주세요.
 -- 신청 테이블도 만들어야 함
 
+-- 회사, 광고
+-- 신청 (회사 fk, 광고 fk)
+
 
 CREATE SEQUENCE SEQ_COMPANY;
 CREATE TABLE TBL_COMPANY(
@@ -246,7 +249,7 @@ SELECT * FROM TBL_DELIVERY;
 
 -- 사용자 : 이름, 연락처, 주소
 -- 굿즈 : 상품명, 가격, 재고, 제작시간
-	
+
 -- 사용자
 CREATE SEQUENCE SEQ_GOODS_USER;
 CREATE TABLE TBL_GOODS_USER(
@@ -287,6 +290,8 @@ CREATE TABLE TBL_GIFTS(
    체험학습은 체험학습 제목, 체험학습 내용, 이벤트 이미지 여러 장이 필요합니다.
    아이들은 여러 번 체험학습에 등록할 수 있어요.
 */
+
+
 
 -- 아이
 CREATE SEQUENCE SEQ_KIDS;
@@ -398,6 +403,18 @@ CREATE TABLE TBL_SIGN_UP(
    아이들은 여러 번 체험학습에 등록할 수 있어요.
 */
 
+-- 아이 : 체험학습 m:n
+-- 신청(아이 fk, 체험학습 fk)
+-- 부모(아이 fk)
+-- 이벤트 이미지(체험학습 fk)
+
+
+-- 아이
+-- 학부모
+-- 체험학습
+-- 신청
+-- 이벤트 이미지
+
 -- 아이 
 CREATE SEQUENCE SEQ_CHILD;
 CREATE TABLE TBL_CHILD(
@@ -463,9 +480,33 @@ CREATE TABLE TBL_APPLY(
 안녕하세요, 광고 회사를 운영하려고 준비중인 사업가입니다.
 광고주는 기업이고 기업 정보는 이름, 주소, 대표번호, 기업종류(스타트업, 중소기업, 중견기업, 대기업)입니다.
 광고는 제목, 내용이 있고 기업은 여러 광고를 신청할 수 있습니다.
-기업이 광고를 선택할 때에는 카테고리로 선택하며, 대카테고리, 중카테고리, 소카테고리가 있습니다.
+기업이 광고를 선택할 때에는 카테고리로 선택하며, 대카테고리, 중카테고리(대 fk), 소카테고리(중 fk)가 있습니다.
 
 */
+
+
+-- 기업1
+-- 광고1
+-- 신청(기업 fk, 광고 fk)
+
+-- 대카테고리(광고 fk)
+-- 중카테고리(대카테고리 fk)
+-- 소카테고리(중카테고리 fk)
+
+
+-- 대카테고리 FK
+CREATE SEQUENCE SEQ_TBL_CATEGORY_A;
+CREATE TABLE TBL_CATEGORY_A(
+   ID NUMBER CONSTRAINT PK_CATEGORY_A PRIMARY KEY,
+   CATEGORY_A_NAME VARCHAR2(255) NOT NULL,
+   ADVERTISEMENT_ID NUMBER,
+   CONSTRAINT FK_CATEGORY_A_ADVERTISEMENT FOREIGN KEY(ADVERTISEMENT_ID)
+   REFERENCES TBL_ADVERTISEMENT(ID)
+);
+
+
+
+
 
 -- 기업이 여러 광고를 신청할 수 있다
 
