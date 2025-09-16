@@ -1,0 +1,109 @@
+/*
+
+   요구사항
+   안녕하세요, 광고 회사를 운영하려고 준비중인 사업가입니다.
+   광고주는 기업이고 기업 정보는 이름, 주소, 대표번호, 기업종류(스타트업, 중소기업, 중견기업, 대기업)입니다.
+   광고는 제목, 내용이 있고 기업은 여러 광고를 신청할 수 있습니다.
+   기업이 광고를 선택할 때에는 카테고리로 선택하며, 대카테고리, 중카테고리, 소카테고리가 있습니다.
+
+*/
+
+-- 하나의 광고에는 여러개의 카테고리가 있음
+-- 대카테고리(광고 fk)
+-- 기업
+CREATE TBL_COMPANY(
+	ID NUMBER CONSTRAINT PK_COMPANY PRIMARY KEY,
+	COMPANY_NAME VARCHAR2(255),
+	COMPANY_TYPE VARCHAR2(255),
+	CONSTRAINT BAN_TYPE CHECK(COMPANY_TYPE IN ('스타트업', '중소기업', '중견기업', '대기업'))
+);
+
+-- 광고(대카테고리 FK)
+CREATE TBL_AD(
+	ID NUMBER CONSTRAINT PK_AD PRIMARY KEY,
+	AD_TITLE VARCHAR2(255) NOT NULL,
+	BIG_ID NUMBER,
+	CONSTRAINT FK_AD_BIG FOREIGN KEY(BIG_ID)
+	REFERENCES TBL_BIG(ID)
+);
+
+-- 신청 (기업 FK, 광고FK)
+CREATE TBL_APPLY(
+	ID NUMBER CONSTRAINT PK_APPLY PRIMARY KEY,
+	COMPANY_ID NUMBER,
+	AD_ID NUMBER,
+	APPLY_NAME VARCHAR2(255) NOT NULL,
+	CONSTRAINT FK_APPLY_COMPANY FOREIGN KEY(COMPANY_ID)
+	REFERENCES TBL_COMPANY(ID)
+	CONSTRAINT FK_APPLY_AD FOREIGN KEY(AD_ID)
+	REFERENCES TBL_AD(ID)
+);
+
+
+-- 대카테고리 (중카테고리 FK)
+CREATE TBL_BIG(
+	ID NUMBER CONSTRAINT PK_BIG PRIMARY KEY,
+	BIG_NAME VARCHAR2(255),
+	MID_ID NUMBER,
+	CONSTRAINT FK_BIG_MID FOREIGN KEY(MID_ID)
+	REFERENCES TBL_MID(ID)
+);
+
+-- 중카테고리
+CREATE TBL_MID(
+	ID NUMBER PK_MID PRIMARY KEY
+);
+-- 소카테고리
+
+
+/*
+   요구사항
+   안녕하세요, 광고 회사를 운영하려고 준비중인 사업가입니다.
+   광고주는 기업이고 기업 정보는 이름, 주소, 대표번호, 기업종류(스타트업, 중소기업, 중견기업, 대기업)입니다.
+   광고는 제목, 내용이 있고 기업은 여러 광고를 신청할 수 있습니다.
+   기업이 광고를 선택할 때에는 카테고리로 선택하며, 대카테고리, 중카테고리, 소카테고리가 있습니다.
+*/
+
+-- 회사
+-- 광고
+-- 신청(회사 FK, 광고 FK)
+
+-- 하나의 광고에는 여러개의 카테고리가 있음
+-- 광고 : 카테고리  ->  1 : N
+
+-- 대카테고리(광고 FK)
+
+-- 회사
+CREATE SEQUENCE SEQ_COMPANY;
+CREATE TABLE TBL_COMPANY(
+	ID NUMBER CONSTRAINT PK_COMPANY PRIMARY KEY,
+	COMPANY_NAME VARCHAR2(255) NOT NULL,
+	COMPANY_ADDRESS VARCHAR2(255),
+	COMPANY_TYPE VARCHAR2(255),
+	CONSTRAINT BAN_TYPE CHECK(COMPANY_TYPE IN ('스타트업', '중소기업',' 중견기업', '대기업'));
+);
+
+CREATE SEQUENCE SEQ_APPLY;
+
+
+-- 대카테고리(광고 FK)
+CREATE SEQUENCE SEQ_BIG;
+CREATE TABLE TBL_BIG(
+	ID NUMBER CONSTRAINT PK_BIG PRIMARY KEY,
+	BIG_NAME VARCHAR2(255),
+	AD_ID NUMBER,
+	CONSTRAINT FK_BIG_AD FOREIGN KEY(AD_ID),
+	REFERENCES TBL_AD(ID)
+);
+
+-- 중카테고리(대카테고리 FK)
+CREATE SEQUENCE SEQ_MID;
+CREATE TABLE TBL_MIN(
+	ID NUMBER CONSTRAINT PK_MID PRIMARY KEY,
+	MID_NAME VATCHAR2(255),
+	BIG_ID NUMBER,
+	CONSTRAINT FK_MID_BIG FOREIGN KEY(BIG_ID)
+	REFERENCES TBL_BIG(ID)
+);
+
+

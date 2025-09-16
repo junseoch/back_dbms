@@ -424,7 +424,6 @@ SELECT *
 
 -- 8) 댓글에 '한민'이가 포함된 게시글에 달린 모든 댓글 조회
 
-
 SELECT *
 FROM TBL_REPLY
 WHERE POST_ID IN(
@@ -436,7 +435,6 @@ WHERE POST_ID IN(
 		WHERE REPLY_CONTENT LIKE '%한민%'
 	)
 );
-
 
 
 -- 댓글에 '한민'이가 포함
@@ -475,11 +473,13 @@ WHERE ID IN (
 			GROUP BY POST_ID)
 )
 );
--- 드럽게 기네
 
 
 SELECT *
 FROM TBL_POST;
+
+SELECT *
+FROM TBL_REPLY;
 
 -- 평균 댓글 개수
 SELECT AVG(COUNT(POST_ID)) 
@@ -488,8 +488,18 @@ SELECT AVG(COUNT(POST_ID))
 
 -- 10) 가장 댓글을 적게 작성한 유저가 작성한 게시글
 
-
-
+SELECT * 
+FROM TBL_POST 
+WHERE USER_ID IN (
+   SELECT USER_ID
+   FROM (
+      SELECT USER_ID
+      FROM TBL_REPLY
+      GROUP BY USER_ID
+      ORDER BY COUNT(USER_ID)
+   )
+   WHERE ROWNUM <= 4
+);
 
 
 

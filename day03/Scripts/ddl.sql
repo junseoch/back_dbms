@@ -135,7 +135,6 @@ CREATE TABLE TBL_DELIVERY(
 */
 
 
-
 -- 하나의 회사가 여러개의 상품을 판매
 -- 회사1
 -- 멤버1

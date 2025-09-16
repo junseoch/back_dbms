@@ -223,6 +223,8 @@ VALUES(SEQ_PRODUCT.NEXTVAL, '배승원의 그램', 4000, 20);
 INSERT INTO TBL_PRODUCT
 VALUES(SEQ_PRODUCT.NEXTVAL, '배승원의 그램', 2000, 40);
 
+
+
 SELECT * FROM TBL_PRODUCT;
 
 -- 평균 인원보다 인원 수가 많은 체험학습을 조회
